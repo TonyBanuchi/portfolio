@@ -7,7 +7,7 @@ import { ProjectCard, ProjectCardProps } from '@/components/ProjectCard';
 // Project Data
   const projects: ProjectCardProps[]  = [
     {
-      id: 1,
+      id: 'CashRegister',
       title: "Cash Register",
       description:
         "A front-end single session application for managing cash transactions.",
@@ -15,6 +15,7 @@ import { ProjectCard, ProjectCardProps } from '@/components/ProjectCard';
       imageColor: "#1E4D5A",
       //imageUrl: '/images/project-1.jpg', // Replace with your actual image path
     },
+    /*
     {
       id: 2,
       title: "Glass Floor Drop",
@@ -24,6 +25,7 @@ import { ProjectCard, ProjectCardProps } from '@/components/ProjectCard';
       imageColor: "#2A9D8F",
       // imageUrl: '/images/project-2.jpg', // Replace with your actual image path
     },
+    */
   ];
 
 // This can remain a server component since theme toggling happens in client components

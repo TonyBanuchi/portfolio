@@ -1,0 +1,11 @@
+.main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.sign {
+  filter: drop-shadow(0 0 2em #ffe601d2);
+  font-size: 3em;
+}

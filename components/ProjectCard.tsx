@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export interface ProjectCardProps {
-  id: number;
+  id: string;
   title: string;
   description: string;
   technologies: string[];
@@ -19,7 +19,7 @@ export interface ProjectCardProps {
   description,
   technologies,
   imageColor = '#456789',
-  imageUrl = ""
+  imageUrl = "",
 }) => {
   return (
     <div className="card">
@@ -59,7 +59,7 @@ export interface ProjectCardProps {
         </div>
         
         <Link 
-          href={`/projects/${id}`} 
+          href={`/pages/${id}`} 
           className="inline-block font-bold text-sm text-accent-secondary hover:underline"
         >
           View Project →
