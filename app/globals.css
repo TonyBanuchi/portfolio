@@ -1,2 +1,107 @@
+/* Using Tailwind CSS v4 @theme directive */
 @import "tailwindcss";
 
+/* Enable the Darkmode variant*/
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Define Font themes */
+@theme inline {
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: var(--font-space-mono);
+
+
+/* Define theme colors using @theme directive */
+  /* Brand colors */
+  --color-brand-primary: #123139;
+  --color-brand-secondary: #1e4d5a;
+  --color-brand-dark: #0b1f24;
+
+  /* Accent colors */
+  --color-accent-primary: #e9c46a;
+  --color-accent-secondary: #2a9d8f;
+
+  /* Light mode colors */
+  --color-light-surface-main: #f8f8f8;
+  --color-light-surface-elevated: #ffffff;
+  --color-light-surface-muted: #ebebeb;
+  --color-light-text-primary: #333333;
+  --color-light-text-secondary: #555555;
+  --color-light-text-muted: #888888;
+  --color-light-text-inverse: #ffffff;
+  --color-light-state-focus: #2a9d8f;
+  --color-light-state-hover: rgba(18, 49, 57, 0.05);
+  --color-light-state-active: rgba(18, 49, 57, 0.1);
+  --color-light-state-disabled: #cccccc;
+  --color-light-state-border: rgba(0, 0, 0, 0.1);
+
+  /* Dark mode colors */
+  --color-dark-surface-main: #121212;
+  --color-dark-surface-elevated: #1e1e1e;
+  --color-dark-surface-muted: #2a2a2a;
+  --color-dark-text-primary: #ffffff;
+  --color-dark-text-secondary: #ebebeb;
+  --color-dark-text-muted: #aaaaaa;
+  --color-dark-text-inverse: #333333;
+  --color-dark-state-focus: #2a9d8f;
+  --color-dark-state-hover: rgba(42, 157, 143, 0.15);
+  --color-dark-state-active: rgba(42, 157, 143, 0.25);
+  --color-dark-state-disabled: #555555;
+  --color-dark-state-border: rgba(255, 255, 255, 0.1);
+}
+
+/* Base styles */
+@layer base {
+  body {
+    @apply bg-light-surface-main text-light-text-primary transition-colors duration-200;
+  }
+
+  .dark body {
+    @apply bg-dark-surface-main text-dark-text-primary;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-medium;
+  }
+
+  a {
+    @apply text-accent-secondary hover:underline;
+  }
+}
+
+/* Component styles */
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded font-medium transition-colors focus-visible:outline-none focus-visible:ring-2;
+  }
+
+  .btn-primary {
+    @apply bg-accent-primary text-brand-dark hover:backdrop-opacity-90 focus-visible:ring-accent-secondary/50;
+  }
+
+  .btn-secondary {
+    @apply bg-accent-secondary text-light-text-inverse hover:backdrop-opacity-90 focus-visible:ring-accent-primary/50;
+    @apply dark:text-dark-text-primary;
+  }
+
+  .btn-outline {
+    @apply bg-transparent border text-light-text-primary border-light-state-border hover:bg-light-state-hover focus-visible:ring-accent-secondary/30;
+    @apply dark:text-dark-text-primary dark:border-dark-state-border dark:hover:bg-dark-state-hover;
+  }
+
+  .card {
+    @apply rounded-lg overflow-hidden shadow-md transition-shadow hover:shadow-lg bg-light-surface-elevated border border-light-state-border;
+    @apply dark:bg-dark-surface-elevated dark:border-dark-state-border;
+  }
+}
+
+/* Utility classes */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
