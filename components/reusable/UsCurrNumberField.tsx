@@ -1,4 +1,5 @@
-import * as React from "react";
+'use client';
+import React, { useState } from "react";
 import { NumberField } from "@base-ui-components/react/number-field";
 import styles from "./UsCurrNumberField.module.scss";
 import { Observable } from "rxjs";
@@ -17,7 +18,7 @@ type UsCurrNumberFieldProps = {
 };
 
 export default function UsCurrNumberField(props: UsCurrNumberFieldProps) {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   let clearState = false;
   props.clearTrigger.subscribe((x: boolean) => {

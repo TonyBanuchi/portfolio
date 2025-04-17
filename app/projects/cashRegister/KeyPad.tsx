@@ -1,3 +1,4 @@
+'use client';
 // REACT Imports
 import React, { ChangeEvent, ChangeEventHandler, useState } from "react";
 

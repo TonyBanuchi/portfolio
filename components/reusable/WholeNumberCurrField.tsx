@@ -1,8 +1,9 @@
-import * as React from "react";
+'use client';
+import React, { useState } from "react";
 import { NumberField } from "@base-ui-components/react/number-field";
 import styles from "./WholeNumberCurrField.module.scss";
 import { Observable } from "rxjs";
-import standardWholeNumberFormat from "../../types/constants/standardWholeNumberFormat.const";
+import standardWholeNumberFormat from "@/types/constants/standardWholeNumberFormat.const";
 
 type WholeNumberCurrFieldProps = {
   label: string;
@@ -17,7 +18,7 @@ type WholeNumberCurrFieldProps = {
 };
 
 export default function WholeNumberCurrField(props: WholeNumberCurrFieldProps) {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   let clearState = false;
   props.clearTrigger.subscribe((x: boolean) => {

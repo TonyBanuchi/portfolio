@@ -1,3 +1,4 @@
+'use client';
 // React Imports
 import { useState } from "react";
 
@@ -7,8 +8,8 @@ import { BehaviorSubject } from "rxjs";
 // componenet imports
 import { Button } from "@mui/material";
 import Paper from "@mui/material/Paper";
-import { ItemsList } from "@/components/cashRegister/ItemsList";
-import { CashCounter } from "@/components/cashRegister/CashCounter";
+import { ItemsList } from "@/app/projects/cashRegister/ItemsList";
+import { CashCounter } from "@/app/projects/cashRegister/CashCounter";
 import UnderConstruction from "@/components/under-construction/UnderConstruction";
 
 // type imports
@@ -225,11 +226,11 @@ export default function CashRegister() {
   if (!ready){return (<><UnderConstruction /></>)}
   return (
     <>
-      <div className="w-98/100 flex flex-col">
+      <div className="max-w-98/100 flex flex-col items-center justify-center justify-self-center">
         <div className="w-full h-1/10 text-center text-accent-secondary dark:text-accent-primary">
-          <h1 className="text-4xl font-bold">Cash Register Calculator</h1>
+          <h1 className="text-4xl font-bold m-3">Cash Register</h1>
         </div>
-        <Paper elevation={1}>
+        <Paper elevation={4} className="max-w-98/100 items-center">
           <ItemsList sendTotal={setPriceValue} resetTrigger={clearTrigger} />
           <div id="price-display" className="text-xl font-bold">
             <p id="price-symbol">

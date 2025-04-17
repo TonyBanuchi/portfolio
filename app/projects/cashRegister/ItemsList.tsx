@@ -1,3 +1,4 @@
+'use client';
 // REACT Imports
 import { useState } from 'react';
 
@@ -6,7 +7,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 // Component Imports
 import { Button, Paper } from '@mui/material';
-import { KeyPad } from '@/components/cashRegister/KeyPad';
+import { KeyPad } from '@/app/projects/cashRegister/KeyPad';
 
 
 // Style Imports

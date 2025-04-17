@@ -59,7 +59,7 @@ export interface ProjectCardProps {
         </div>
         
         <Link 
-          href={`/pages/${id}`} 
+          href={`/projects/${id}`} 
           className="inline-block font-bold text-sm text-accent-secondary hover:underline"
         >
           View Project →

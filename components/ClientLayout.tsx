@@ -36,7 +36,7 @@ const ClientLayout: React.FC<ClientLayoutProps> = ({ children }) => {
             </div>
 
             {/* Contact section */}
-            <div className="justify-items-center">
+            <div className="justify-items-start md:justify-items-center">
               <h3 className="text-lg font-bold mb-4">Contact Me</h3>
               <div className="flex flex-col space-y-2">
                 <a
