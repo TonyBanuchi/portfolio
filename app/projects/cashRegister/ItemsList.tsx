@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 // Component Imports
 import { Button, Paper } from '@mui/material';
-import { KeyPad } from '@/app/projects/CashRegister/KeyPad';
+import { KeyPad } from '@/app/projects/cashRegister/KeyPad';
 
 
 // Style Imports

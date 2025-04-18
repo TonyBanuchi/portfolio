@@ -2,7 +2,7 @@ import { ProjectCardProps } from "@/components/ProjectCard";
 
 export const projectsList: ProjectCardProps[]  = [
   {
-    id: 'CashRegister',
+    id: 'cashRegister',
     title: "Cash Register",
     description:
       "A front-end single session application for managing cash transactions.",

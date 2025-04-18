@@ -8,8 +8,8 @@ import { BehaviorSubject } from "rxjs";
 // componenet imports
 import { Button } from "@mui/material";
 import Paper from "@mui/material/Paper";
-import { ItemsList } from "@/app/projects/CashRegister/ItemsList";
-import { CashCounter } from "@/app/projects/CashRegister/CashCounter";
+import { ItemsList } from "@/app/projects/cashRegister/ItemsList";
+import { CashCounter } from "@/app/projects/cashRegister/CashCounter";
 import UnderConstruction from "@/components/under-construction/UnderConstruction";
 
 // type imports
