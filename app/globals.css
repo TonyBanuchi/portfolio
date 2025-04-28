@@ -97,6 +97,10 @@
     @apply rounded-lg overflow-hidden shadow-md transition-shadow hover:shadow-lg bg-light-surface-elevated border border-light-state-border;
     @apply dark:bg-dark-surface-elevated dark:border-dark-state-border;
   }
+
+  button:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
 }
 
 /* Utility classes */
@@ -105,3 +109,4 @@
     text-wrap: balance;
   }
 }
+

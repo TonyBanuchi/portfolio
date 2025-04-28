@@ -1,13 +1,21 @@
 'use client';
+
+// REACT Imports
 import React, { useState } from "react";
+
+// Component Imports
 import { NumberField } from "@base-ui-components/react/number-field";
-import styles from "./WholeNumberCurrField.module.scss";
-import { Observable } from "rxjs";
+import { Paper } from "@mui/material";
+
+// Type Imports
 import standardWholeNumberFormat from "@/types/constants/standardWholeNumberFormat.const";
 
+// Logic Imports
+import { Observable } from "rxjs";
+
+// Custom Number field Properties
 type WholeNumberCurrFieldProps = {
   label: string;
-  name: string;
   fieldId: string;
   changeHandler: (value: number) => void;
   step: number;
@@ -17,9 +25,12 @@ type WholeNumberCurrFieldProps = {
   multiplier: number;
 };
 
-export default function WholeNumberCurrField(props: WholeNumberCurrFieldProps) {
+// Custom Number field handling whole number to currency calculation
+export default function WholeNumberCurrField(props: Readonly<WholeNumberCurrFieldProps>) {
+  // state declaration
   const [value, setValue] = useState(0);
 
+  // clear value trigger
   let clearState = false;
   props.clearTrigger.subscribe((x: boolean) => {
     if (clearState !== x) {
@@ -28,6 +39,7 @@ export default function WholeNumberCurrField(props: WholeNumberCurrFieldProps) {
     }
   });
 
+  // Change Handler
   function onChangeHandler(
     value: number | null,
     event: Event | undefined
@@ -36,14 +48,15 @@ export default function WholeNumberCurrField(props: WholeNumberCurrFieldProps) {
       setValue(value);
       props.changeHandler(value);
     }
-    return;
-  }
+  };
 
+  // Componenet Markup
   return (
+    <Paper elevation={2} className="m-3 p-3 bg-light-surface-main">
     <NumberField.Root
       id={props.fieldId}
       defaultValue={0}
-      className={styles.Field}
+      className="flex flex-col gap-1"
       onValueChange={onChangeHandler}
       step={props.step}
       smallStep={props.smallStep}
@@ -51,47 +64,32 @@ export default function WholeNumberCurrField(props: WholeNumberCurrFieldProps) {
       format={standardWholeNumberFormat}
       value={value}
     >
-      <NumberField.ScrubArea className={styles.ScrubArea}>
-      <div className={`${styles["label-container"]} flex flex-row`}>
-          <label htmlFor={props.fieldId} className={styles.Label}>
+      <NumberField.ScrubArea className="font-bold select-none cursor-crosshair">
+      <div className="justify-between flex flex-row">
+          <label htmlFor={props.fieldId} className="text-lg ">
             {props.label}
-          </label><p>{`$ ${(value * props.multiplier).toFixed(2)}`}</p>
+          </label><span className="font-mono font-light text-sm"> (${props.multiplier.toFixed(2)})</span>
         </div>
-        <NumberField.ScrubAreaCursor className={styles.ScrubAreaCursor}>
-          <CursorGrowIcon />
-        </NumberField.ScrubAreaCursor>
+        <NumberField.ScrubAreaCursor className="drop-shadow-xs" />
       </NumberField.ScrubArea>
 
-      <NumberField.Group className={styles.Group}>
-        <NumberField.Decrement className={styles.Decrement}>
+      <NumberField.Group className="flex gap-1">
+        <NumberField.Decrement className="cursor-pointer box-border flex items-center justify-center size-10 m-0 p-0 outline-1 rounded-md border border-light-state-border bg-light-surface-muted text-light-text-primary">
           <MinusIcon />
         </NumberField.Decrement>
-        <NumberField.Input className={styles.Input} />
-        <NumberField.Increment className={styles.Increment}>
+        <NumberField.Input className="box-border m-0 p-0 border-y border-y-light-state-border bg-light-surface-elevated text-light-text-primary font-mono text-lg w-12 text-center" />
+        <NumberField.Increment className="cursor-pointer box-border flex items-center justify-center size-10 m-0 p-0 outline-1 rounded-md border border-light-state-border bg-light-surface-muted text-light-text-primary">
           <PlusIcon />
         </NumberField.Increment>
+        <p className="ml-2">{`$ ${(value * props.multiplier).toFixed(2)}`}</p>
       </NumberField.Group>
     </NumberField.Root>
+    </Paper>
   );
 }
 
-function CursorGrowIcon(props: React.ComponentProps<"svg">) {
-  return (
-    <svg
-      width="26"
-      height="14"
-      viewBox="0 0 24 14"
-      fill="black"
-      stroke="white"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path d="M19.5 5.5L6.49737 5.51844V2L1 6.9999L6.5 12L6.49737 8.5L19.5 8.5V12L25 6.9999L19.5 2V5.5Z" />
-    </svg>
-  );
-}
-
-function PlusIcon(props: React.ComponentProps<"svg">) {
+// Increment Icon
+function PlusIcon(props: Readonly<React.ComponentProps<"svg">>) {
   return (
     <svg
       width="10"
@@ -108,7 +106,8 @@ function PlusIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function MinusIcon(props: React.ComponentProps<"svg">) {
+// Decrement Icon
+function MinusIcon(props: Readonly<React.ComponentProps<"svg">>) {
   return (
     <svg
       width="10"

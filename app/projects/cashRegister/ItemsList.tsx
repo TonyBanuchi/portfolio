@@ -1,94 +1,144 @@
-'use client';
+"use client";
 // REACT Imports
-import { useState } from 'react';
+import { useReducer } from "react";
 
 // Logic imports
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from "rxjs";
 
 // Component Imports
-import { Button, Paper } from '@mui/material';
-import { KeyPad } from '@/app/projects/cashRegister/KeyPad';
+import { Paper } from "@mui/material";
+import { KeyPad } from "@/app/projects/cashRegister/KeyPad";
 
-
-// Style Imports
-
-export interface ICashCounterProps {
-  sendTotal: (total: number) => void;
-  resetTrigger: Observable<boolean>;
-
+// REDUCER - enum for types
+enum listActionType {
+  add = "add",
+  clear = "clear",
 }
 
-export function ItemsList(props: ICashCounterProps) {
+// REDUCER - interface for actions
+interface IListAction {
+  type: listActionType;
+  payload: string;
+}
+
+// REDUCER - interface for state
+interface IListState {
+  items: string[];
+  total: string;
+}
+
+// interface for item list component
+
+export interface IitemListProps {
+  sendTotal: (total: string) => void;
+  resetTrigger: Observable<boolean>;
+}
+
+function listReducer(state: IListState, action: IListAction) {
+  const { type, payload } = action;
+  switch (type) {
+    case listActionType.add:
+      return {
+        ...state,
+        items: [...state.items, payload],
+        total: (Number(state.total) + Number(payload)).toFixed(2),
+      };
+
+    case listActionType.clear:
+      return {
+        ...state,
+        items: [],
+        total: "0.00",
+      };
+    default:
+      return state;
+  }
+}
+
+export function ItemsList(props: Readonly<IitemListProps>) {
   // STATE Context
-  const [totalPrice, setTotalPrice] = useState<number>(0);
-  const [items, setItems] = useState<number[]>([]);
+  const [state, dispatch] = useReducer(listReducer, {
+    items: [],
+    total: "0.00",
+  });
 
   // configure parent trigger response
   props.resetTrigger.subscribe((observer) => {
-    if(observer){
+    if (observer) {
       clearList();
     }
-  })
+  });
 
   let keypadTriggerValue = false;
-  const keyPadClear: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(keypadTriggerValue);
+  const keyPadClear: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    keypadTriggerValue
+  );
 
-  // Add item to list handler
-  function addItem(item: number): void {
-    setItems([...items, item]);
-    setTotalHandler();
-  }
-
-  // calculate and update total
-  function setTotalHandler(): void {
-    const newTotal = items.reduce((p: number, a: number) => parseInt((a += p).toFixed(2)), 0);
-    setTotalPrice(newTotal);
+  // Add item to list handler and updates total
+  function addItem(item: string): void {
+    dispatch({ type: listActionType.add, payload: item });
   }
 
   // clear item list entries
-  const clearList = () => { 
-    setItems([]) 
+  function clearList(): void {
+    dispatch({ type: listActionType.clear, payload: "" });
     keypadTriggerValue = !keypadTriggerValue;
     keyPadClear.next(keypadTriggerValue);
-    setTotalPrice(0);
-  };
+  }
 
-  function sendTotalHandler():void {
-      props.sendTotal(totalPrice);
+  function sendTotalHandler(): void {
+    props.sendTotal(state.total);
   }
 
   return (
-    <>
-      <Paper elevation={2}>
-        <div className="flex flex-col place-items-center size-8/10 m-1 p-1">
-      <div className={`flex flex-row`}>
-        <Paper elevation={3}>
-        <div className="list-none">
-          <ul>
-            {items.map((item) => (
-              <li key={crypto.randomUUID()} >{item}</li>
-            ))}
-          </ul>
+    <Paper elevation={2} className="size-full">
+      <div className="flex flex-col w-full bg-light-surface-muted">
+        <div className="size-full max-w-98/100 place-items-center justify-evenly flex flex-col md:flex-row m-3 p-3">
+          {/* Itemized prices list */}
+          <Paper
+            elevation={3}
+            className="flex flex-col size-full m-3 p-3 place-items-center max-h-60 max-w-full md:max-w-1/4"
+          >
+            <h3 className="mt-2 mb-4">Items</h3>
+            <ul className="list-none overflow-y-auto max-h-40 place-self-end">
+              {state.items.map((item) => (
+                <li
+                  className="text-lg text-end mr-10"
+                  key={crypto.randomUUID()}
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-row justify-between mt-3">
+              <h3 className="font-bold text-xl">Total:</h3>
+              <h3 className="font-bold text-xl">{`$${state.total}`}</h3>
+            </div>
+          </Paper>
+
+          <KeyPad
+            sendItem={(item: string) => addItem(item)}
+            clear={keyPadClear}
+          />
         </div>
-        </Paper>
-        <div id="price-display" className="font-bold text-xl">{`$${totalPrice.toFixed(2)}`}
-        <Paper elevation={3}>
-        <KeyPad sendItem={(item: number) => addItem(item)} clear={keyPadClear}/>
-        </Paper>
+
+        <div className="flex flex-row m-3 p-3 place-items-center justify-around">
+          <button
+            id="acknowledge-btn"
+            className="btn btn-primary"
+            onClick={clearList}
+          >
+            Clear List
+          </button>
+          <button
+            id="purchase-btn"
+            className="btn btn-secondary"
+            onClick={sendTotalHandler}
+          >
+            Submit Purchase
+          </button>
         </div>
-        </div>
-        <Paper elevation={3}>
-        <div className="flex flex-row">
-        <Button id="purchase-btn" className="btn btn-primary" variant="contained" onClick={sendTotalHandler}>
-          Add Item
-        </Button>
-        <Button id="acknowledge-btn" className='btn btn-primary' variant="contained" onClick={clearList}>
-          Clear
-        </Button>
       </div>
-      </Paper>
-    </div >
     </Paper>
-    </>
   );
 }

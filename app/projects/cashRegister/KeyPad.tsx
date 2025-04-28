@@ -2,37 +2,32 @@
 // REACT Imports
 import React, { ChangeEvent, ChangeEventHandler, useState } from "react";
 
+// Component Communication Imports
+import { Observable } from "rxjs";
+
 // Component Imports
-import { Button } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 
-// type imports
 
-// Style Imports
-import { BehaviorSubject, Observable } from "rxjs";
-
+// Interface definiation of Keypad Component Properties
 export interface IKeyPadProps {
-  sendItem: (total: number) => void;
+  sendItem: (itemPrice: string) => void;
   clear: Observable<boolean>;
 }
 
-export function KeyPad(props: IKeyPadProps) {
+// KeyPad Component
+export function KeyPad(props: Readonly<IKeyPadProps>) {
   // STATE Context
-  const [price, setPrice] = useState<number>(0);
+  const [price, setPrice] = useState<string>('0.00');
   let clearState = false;
 
   // subscribe to triggers
   props.clear.subscribe((x: boolean) => {
     if (x !== clearState) {
       clearState = !clearState;
-      setPrice(0);
       clearEntry();
     }
   });
-
-  let clearTriggerValue = false;
-  const clearTrigger: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    clearTriggerValue
-  );
 
   function addItem(): void {
     props.sendItem(price);
@@ -40,46 +35,52 @@ export function KeyPad(props: IKeyPadProps) {
   }
 
   function clearEntry(): void {
-    clearTriggerValue = !clearTriggerValue;
-    clearTrigger.next(clearTriggerValue);
+    setPrice('0.00');
+
   }
 
   const incrementValue = () => {
-    setPrice(price + 0.01);
+    setPrice((parseInt(price) + 0.01).toFixed(2));
   };
   const decrementValue = () => {
-    setPrice(price - 0.01);
+    const value = parseInt(price);
+    if(value === 0){return;}
+    if(value < 0){setPrice('0.00'); return;}
+    setPrice((parseInt(price) - 0.01).toFixed(2));
   };
 
   const handlePriceChange: ChangeEventHandler<HTMLInputElement> = (
     event: ChangeEvent<HTMLInputElement>
   ) => {
-    setPrice(Number(event.target.value));
+    setPrice(event.target.value);
   };
 
   function keyPadHandler(key: number): void {
-    let newValue = price.toFixed(2);
+    let newValue = price;
     newValue = newValue.replace(".", "");
     newValue += `${key}`;
     newValue =
       newValue.substring(0, newValue.length - 2) +
       "." +
       newValue.substring(newValue.length - 2);
-    setPrice(Number(newValue));
+    setPrice(Number(newValue).toFixed(2));
   }
 
   return (
-    <>
-      <div className="flex flex-col">
-        <div className="flex flex-row">
-          <Button
+    <Paper elevation={3} className="
+              flex
+              flex-col
+              size-full
+              max-w-full md:max-w-1/2 lg:max-w-1/3
+              m-3 p-3 place-items-center">
+        <div className="flex flex-row size-full justify-between gap-3">
+          <button
             id="decrement"
-            className="btn btn-primary"
-            variant="contained"
+            className="btn btn-primary font-bold text-4xl"
             onClick={decrementValue}
           >
             -
-          </Button>
+          </button>
           <input
             type="number"
             className="text-center text-lg"
@@ -87,17 +88,16 @@ export function KeyPad(props: IKeyPadProps) {
             onChange={handlePriceChange}
             min={0}
           />
-          <Button
+          <button
             id="increment"
-            className="btn btn-secondary"
-            variant="contained"
+            className="btn btn-secondary font-bold text-4xl"
             onClick={incrementValue}
           >
             +
-          </Button>
+          </button>
         </div>
-        <div className="flex flex-row">
-          <div className="flex flex-col">
+        <div className="flex flex-row gap-2">
+          <div className="flex flex-col gap-2">
             <Button id="7" variant="contained" onClick={() => keyPadHandler(7)}>
               7
             </Button>
@@ -107,16 +107,16 @@ export function KeyPad(props: IKeyPadProps) {
             <Button id="1" variant="contained" onClick={() => keyPadHandler(1)}>
               1
             </Button>
-            <Button
+            <button
               id="clear"
               className="btn btn-primary"
-              variant="contained"
               onClick={clearEntry}
+              disabled={price === '0.00'}
             >
               Clear
-            </Button>
+            </button>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-2">
             <Button id="8" variant="contained" onClick={() => keyPadHandler(8)}>
               8
             </Button>
@@ -130,7 +130,7 @@ export function KeyPad(props: IKeyPadProps) {
               0
             </Button>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-2">
             <Button id="9" variant="contained" onClick={() => keyPadHandler(9)}>
               9
             </Button>
@@ -140,17 +140,16 @@ export function KeyPad(props: IKeyPadProps) {
             <Button id="3" variant="contained" onClick={() => keyPadHandler(3)}>
               3
             </Button>
-            <Button
+            <button
               id="add"
               className="btn btn-secondary"
-              variant="contained"
               onClick={addItem}
+              disabled={price === '0.00'}
             >
               Add
-            </Button>
+            </button>
           </div>
         </div>
-      </div>
-    </>
+      </Paper>
   );
 }
